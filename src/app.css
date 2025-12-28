@@ -3,15 +3,18 @@
 @plugin "@tailwindcss/typography";
 @plugin "@tailwindcss/forms";
 
-@theme {
-  --color-neon-pink: #f535aa;
-  --color-neon-blue: #05d9ff;
-}
-
-/* Base
-*************************************************/
 @layer base {
-  /* * {
-    @apply outline-neon-pink outline-3 border-neon-blue border-4;
-  } */
+	body {
+		@apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
+	}
+
+	/* Ensure color scheme is set for light-dark() to work */
+	:root {
+		color-scheme: light dark;
+	}
+
+	/* Improve readability */
+	button {
+		font-weight: 500;
+	}
 }
