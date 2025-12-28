@@ -17,9 +17,10 @@ export function clickSkipButton(): boolean {
 	for (const selector of selectors) {
 		const button = document.querySelector<HTMLButtonElement>(selector);
 		if (button && isButtonVisible(button)) {
-			logger.action('Clicking skip button', selector);
+			logger.action('Skip button found', selector);
 			setTimeout(() => {
 				button.click();
+				logger.info('Successfully clicked skip button');
 			}, TIMINGS.SKIP_DELAY);
 			return true;
 		}
@@ -41,9 +42,10 @@ export function clickContinueWatching(): boolean {
 	for (const selector of selectors) {
 		const button = document.querySelector<HTMLButtonElement>(selector);
 		if (button && isButtonVisible(button)) {
-			logger.action('Clicking continue watching button', selector);
+			logger.action('Continue watching button found', selector);
 			setTimeout(() => {
 				button.click();
+				logger.info('Successfully clicked continue watching button');
 			}, TIMINGS.SKIP_DELAY);
 			return true;
 		}
