@@ -56,7 +56,27 @@ export function clickSkipButton(): boolean {
 
 	for (const selector of selectors) {
 		const button = document.querySelector<HTMLButtonElement>(selector);
-		if (button && isButtonClickable(button)) {
+		if (button) {
+			const opacity = window.getComputedStyle(button).opacity;
+			const buttonText = button.textContent?.trim() || '';
+
+			// Log button found but not ready
+			if (!isButtonClickable(button)) {
+				logger.debug('Skip button found but not ready', {
+					selector,
+					opacity,
+					text: buttonText,
+					disabled: button.disabled
+				});
+				continue;
+			}
+
+			// Check if button text is ready (should be just "Skip", not "Skip in 5s")
+			if (buttonText.includes('in') || /\d/.test(buttonText)) {
+				logger.debug('Skip button has countdown', { text: buttonText });
+				continue;
+			}
+
 			// Check if we already clicked this button recently
 			const now = Date.now();
 			if (button === lastClickedButton && now - lastClickTime < CLICK_COOLDOWN) {
@@ -64,12 +84,11 @@ export function clickSkipButton(): boolean {
 				return false;
 			}
 
-			const opacity = window.getComputedStyle(button).opacity;
-			logger.action('Skip button found', {
+			logger.action('Skip button ready to click', {
 				selector,
 				opacity,
-				disabled: button.disabled,
-				ariaDisabled: button.getAttribute('aria-disabled')
+				text: buttonText,
+				disabled: button.disabled
 			});
 
 			setTimeout(() => {
