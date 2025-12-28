@@ -64,8 +64,10 @@ export function clickSkipButton(): boolean {
 				return false;
 			}
 
+			const opacity = window.getComputedStyle(button).opacity;
 			logger.action('Skip button found', {
 				selector,
+				opacity,
 				disabled: button.disabled,
 				ariaDisabled: button.getAttribute('aria-disabled')
 			});
@@ -122,12 +124,17 @@ function isButtonClickable(element: HTMLElement): boolean {
 	const isDisabled = element instanceof HTMLButtonElement && element.disabled;
 	const ariaDisabled = element.getAttribute('aria-disabled') === 'true';
 
+	// YouTube uses opacity to indicate if the button is ready
+	// Opacity 0.5 = button visible but not ready, 1.0 = ready to click
+	const opacity = parseFloat(style.opacity);
+	const isFullyOpaque = opacity >= 0.99; // Allow for small floating point differences
+
 	return (
 		rect.width > 0 &&
 		rect.height > 0 &&
 		style.display !== 'none' &&
 		style.visibility !== 'hidden' &&
-		style.opacity !== '0' &&
+		isFullyOpaque &&
 		!isDisabled &&
 		!ariaDisabled
 	);
