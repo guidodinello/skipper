@@ -1,6 +1,46 @@
 import { YOUTUBE_SELECTORS, TIMINGS } from '@/lib/constants';
 import { logger } from '@/lib/utils/logger';
 
+// Track last clicked button to avoid spam clicking
+let lastClickedButton: HTMLElement | null = null;
+let lastClickTime = 0;
+const CLICK_COOLDOWN = 3000; // Don't click the same button within 3 seconds
+
+/**
+ * Simulates a user click with mouse events for better compatibility
+ * @param element The element to click
+ */
+function simulateUserClick(element: HTMLElement): void {
+	// Try multiple click methods for maximum compatibility
+
+	// Method 1: Mouse events (most reliable for YouTube)
+	const mouseEvents = ['mousedown', 'mouseup', 'click'];
+	mouseEvents.forEach(eventType => {
+		const event = new MouseEvent(eventType, {
+			view: window,
+			bubbles: true,
+			cancelable: true,
+			buttons: 1
+		});
+		element.dispatchEvent(event);
+	});
+
+	// Method 2: Pointer events (newer standard)
+	const pointerEvents = ['pointerdown', 'pointerup'];
+	pointerEvents.forEach(eventType => {
+		const event = new PointerEvent(eventType, {
+			view: window,
+			bubbles: true,
+			cancelable: true,
+			isPrimary: true
+		});
+		element.dispatchEvent(event);
+	});
+
+	// Method 3: Regular click as fallback
+	element.click();
+}
+
 /**
  * Attempts to click the YouTube skip ad button
  * Uses multiple fallback selectors for reliability
@@ -16,12 +56,27 @@ export function clickSkipButton(): boolean {
 
 	for (const selector of selectors) {
 		const button = document.querySelector<HTMLButtonElement>(selector);
-		if (button && isButtonVisible(button)) {
-			logger.action('Skip button found', selector);
+		if (button && isButtonClickable(button)) {
+			// Check if we already clicked this button recently
+			const now = Date.now();
+			if (button === lastClickedButton && now - lastClickTime < CLICK_COOLDOWN) {
+				logger.debug('Skip button on cooldown, skipping click');
+				return false;
+			}
+
+			logger.action('Skip button found', {
+				selector,
+				disabled: button.disabled,
+				ariaDisabled: button.getAttribute('aria-disabled')
+			});
+
 			setTimeout(() => {
-				button.click();
+				simulateUserClick(button);
+				lastClickedButton = button;
+				lastClickTime = Date.now();
 				logger.info('Successfully clicked skip button');
 			}, TIMINGS.SKIP_DELAY);
+
 			return true;
 		}
 	}
@@ -41,10 +96,10 @@ export function clickContinueWatching(): boolean {
 
 	for (const selector of selectors) {
 		const button = document.querySelector<HTMLButtonElement>(selector);
-		if (button && isButtonVisible(button)) {
+		if (button && isButtonClickable(button)) {
 			logger.action('Continue watching button found', selector);
 			setTimeout(() => {
-				button.click();
+				simulateUserClick(button);
 				logger.info('Successfully clicked continue watching button');
 			}, TIMINGS.SKIP_DELAY);
 			return true;
@@ -57,18 +112,24 @@ export function clickContinueWatching(): boolean {
 /**
  * Checks if a button element is visible and clickable
  * @param element The button element to check
- * @returns true if the element is visible
+ * @returns true if the element is visible and enabled
  */
-function isButtonVisible(element: HTMLElement): boolean {
+function isButtonClickable(element: HTMLElement): boolean {
 	const rect = element.getBoundingClientRect();
 	const style = window.getComputedStyle(element);
+
+	// Check if button is a HTMLButtonElement and is disabled
+	const isDisabled = element instanceof HTMLButtonElement && element.disabled;
+	const ariaDisabled = element.getAttribute('aria-disabled') === 'true';
 
 	return (
 		rect.width > 0 &&
 		rect.height > 0 &&
 		style.display !== 'none' &&
 		style.visibility !== 'hidden' &&
-		style.opacity !== '0'
+		style.opacity !== '0' &&
+		!isDisabled &&
+		!ariaDisabled
 	);
 }
 
