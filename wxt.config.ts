@@ -1,40 +1,36 @@
-import { defineConfig } from 'wxt';
+import { defineConfig } from "wxt";
 import wasm from "vite-plugin-wasm";
 import topLevelAwait from "vite-plugin-top-level-await";
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  srcDir: 'src',
-  modules: ['@wxt-dev/module-svelte'],
-  manifest: {
-    name: "Name",
-    description: "My extension description",
-    permissions: ["storage"],
-    web_accessible_resources: [
-      {
-        resources: ["dashboard.html"],
-        matches: ["*://*/*"]
-      }
-    ],
-    // entrypoints: {
-    //   // Existing entry points
-    //   background: 'src/entrypoints/background.ts',
-    //   popup: 'src/entrypoints/popup/popup.ts',
-    //   dashboard: 'src/entrypoints/dashboard/dashboard.ts',
-    //   // Updated content script entry point
-    //   content: 'src/entrypoints/content/content.ts'
-    // },
-  },
-  vite: () => ({
-    plugins: [
-      wasm(),
-      topLevelAwait(),
-      tailwindcss()
-    ],
-  }),
+    srcDir: "src",
+    modules: ["@wxt-dev/module-svelte"],
+    manifest: {
+        name: "Skipper",
+        description: "Automatically skip YouTube ads by clicking the skip button",
+        permissions: ["storage"],
+        icons: {
+            16: "icons/icon-16.png",
+            32: "icons/icon-32.png",
+            48: "icons/icon-48.png",
+            128: "icons/icon-128.png",
+        },
+        browser_specific_settings: {
+            gecko: {
+                id: "skipper@guidodinello.dev",
+                // Required by Firefox for all new extensions. This extension does not collect any user data
+                // @ts-ignore
+                data_collection_permissions: { required: ["none"] },
+            },
+        },
+    },
+    vite: () => ({
+        plugins: [wasm(), topLevelAwait(), tailwindcss()],
+    }),
 
-  runner: {
-    startUrls: ['https://www.google.com']
-  }
+    runner: {
+        startUrls: ["https://www.youtube.com/watch?v=dQw4w9WgXcQ"],
+    },
 });
