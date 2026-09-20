@@ -1,34 +1,31 @@
-# Pullscope
+# Skipper
 
-> Automatically apply custom filters to GitHub Pull Request pages with real-time sync across all tabs.
+> Automatically skip YouTube ads by clicking the skip button for you
 
-<p align="center">
-  <img src="src/public/icons/pullscope-icon.svg" alt="Pullscope Logo" width="128" height="128">
-</p>
+A lightweight browser extension that watches for YouTube skip ad buttons and clicks them instantly, so you never have to. It also dismisses "Continue watching?" confirmation prompts automatically.
 
-## 🎯 Overview
+## Features
 
-Pullscope is a browser extension that streamlines your GitHub PR workflow by automatically applying custom search filters when you visit Pull Request pages.
+-   **Automatic Ad Skipping**: Detects and clicks the skip button the moment it becomes available
+-   **Continue Watching**: Automatically dismisses YouTube's "Continue watching?" confirmation dialog
+-   **Multi-Selector Fallback**: Targets multiple known skip button selectors so it keeps working when YouTube changes their DOM
+-   **Smart Click Detection**: Waits until the skip button is fully visible and enabled (opacity check, disabled/aria-disabled check) before clicking — avoids false triggers during countdown
+-   **Simulated User Interaction**: Dispatches `mousedown`, `mouseup`, `click`, and pointer events for maximum YouTube compatibility
+-   **Click Cooldown**: Prevents spam-clicking the same button within a 3-second window
+-   **Real-Time DOM Watching**: Uses a `MutationObserver` scoped to the YouTube player container for efficient, low-overhead detection
+-   **Toggle On/Off**: Enable or disable skipping from the popup without reloading the page; state is persisted across sessions
+-   **Dark Mode**: Popup UI supports system dark mode automatically
+-   **Cross-Browser**: Works on Chrome/Chromium (MV3) and Firefox (MV2)
 
-### Key Features
-
-✨ **Automatic Filter Application** - Filters apply instantly when you visit any GitHub PR page
-
-🔄 **Real-Time Sync** - Toggle filters on/off and see results update immediately across all open tabs
-
-🚀 **Cross-Browser** - Works on Chrome, Firefox, and other Chromium-based browsers
-
-⚡ **Fast & Lightweight** - Built with modern web technologies for optimal performance
-
-## 📦 Installation
+## Installation
 
 ### From Source
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/guidodinello/pullscope.git
-cd pullscope
+git clone https://github.com/guidodinello/skipper.git
+cd skipper
 ```
 
 2. Install dependencies:
@@ -37,113 +34,161 @@ cd pullscope
 pnpm install
 ```
 
-3. Build the extension:
+3. Build for your browser:
 
 ```bash
-pnpm build # For Chrome/Chromium
+# For Chrome/Chromium
+pnpm build
 
-pnpm build:firefox # For Firefox
+# For Firefox
+pnpm build:firefox
 ```
 
 4. Load the extension:
+    - **Chrome**: Navigate to `chrome://extensions/`, enable "Developer mode", click "Load unpacked", and select the `.output/chrome-mv3` directory
+    - **Firefox**: Navigate to `about:debugging#/runtime/this-firefox`, click "Load Temporary Add-on", and select any file in the `.output/firefox-mv2` directory
 
-**Chrome/Chromium:**
+## Usage
 
--   Open `chrome://extensions/`
--   Enable "Developer mode"
--   Click "Load unpacked"
--   Select the `.output/chrome-mv3` directory
+### Basic Usage
 
-**Firefox:**
+1. Visit any YouTube video page (`youtube.com/watch?...`)
+2. When an ad plays and a skip button appears, Skipper clicks it automatically
+3. If YouTube asks "Continue watching?", Skipper dismisses that too
 
--   Open `about:debugging#/runtime/this-firefox`
--   Click "Load Temporary Add-on"
--   Select the `manifest.json` file from `.output/firefox-mv2`
+The extension activates only on YouTube watch pages and does nothing on other sites.
+
+### Enabling / Disabling
+
+Click the Skipper icon in your browser toolbar to open the popup. Use the toggle switch to enable or disable automatic skipping. The setting persists across browser sessions and syncs immediately — no page reload required.
+
+### Checking Logs
+
+Open the browser console on a YouTube watch page and filter for `[Skipper]` to see real-time activity: which selector matched, when a button was clicked, and any detection issues.
+
+## Development
+
+### Prerequisites
+
+-   [Node.js](https://nodejs.org/) (v18 or higher)
+-   [pnpm](https://pnpm.io/) package manager
+
+### Setup
+
+```bash
+pnpm install
+```
 
 ### Development Mode
 
+Run with hot reload (opens `youtube.com/watch?v=dQw4w9WgXcQ` automatically):
+
 ```bash
-pnpm dev # Chrome with hot reload
+# Chrome
+pnpm dev
 
-pnpm dev:firefox # Firefox with hot reload
+# Firefox
+pnpm dev:firefox
+
+# Chrome (Flatpak install)
+pnpm dev:chrome-flatpak
 ```
 
-## 🚀 Usage
+### Building
 
-### Quick Start
+```bash
+# Production build for Chrome
+pnpm build
 
-1. **Install the extension** using the instructions above
-2. **Visit any GitHub PR page** (e.g., `https://github.com/facebook/react/pulls`)
-3. **Click the extension icon** to open the popup
-4. **Click "Manage Filters"** to add your first filter
-5. **Create a filter** with a name and GitHub search syntax:
-    - Name: `Hide Dependabot PRs`
-    - Value: `-author:app/dependabot`
-6. **Save** and refresh the PR page - filter applies automatically!
-
-### Filter Examples
-
-```
-# Hide Dependabot PRs
--author:app/dependabot
-
-# Only show open PRs
-is:open
-
-# PRs assigned to you
-assignee:@me
-
-# PRs with specific label
-label:"bug"
-
-# Combine multiple filters
-is:open -author:app/dependabot label:"priority"
+# Production build for Firefox
+pnpm build:firefox
 ```
 
-See [GitHub's search syntax documentation](https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests) for all available qualifiers.
+### Creating Distribution Packages
 
-## 🏗️ Technology Stack
+```bash
+# Create ZIP for Chrome Web Store
+pnpm zip
 
--   **[WXT](https://wxt.dev/)** - Cross-browser extension framework
--   **[Svelte 5](https://svelte.dev/)** - Reactive UI framework with runes API
--   **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
--   **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first styling
+# Create ZIP for Firefox Add-ons
+pnpm zip:firefox
+```
+
+### Code Quality
+
+```bash
+# Type checking
+pnpm check
+
+# Lint code
+pnpm lint
+
+# Format code
+pnpm format
+
+# Fix lint, format, and type issues in one go
+pnpm fix
+```
+
+## Technology Stack
+
+-   **[WXT](https://wxt.dev/)** - Modern cross-browser extension framework
+-   **[Svelte 5](https://svelte.dev/)** - Reactive UI with runes API (`$state`, `$effect`, `$derived`)
+-   **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript throughout
+-   **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first styling for the popup UI
 -   **[Vite](https://vitejs.dev/)** - Fast build tool
 
-## 🤝 Contributing
+## Project Structure
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+```
+skipper/
+├── src/
+│   ├── entrypoints/
+│   │   ├── background.ts         # Background service worker
+│   │   ├── content.ts            # YouTube content script (MutationObserver + polling)
+│   │   └── popup/                # Popup UI
+│   │       ├── index.html
+│   │       ├── popup.ts
+│   │       └── Popup.svelte      # Toggle switch component
+│   ├── lib/
+│   │   ├── constants.ts          # YouTube selectors, storage keys, timing config
+│   │   ├── storage.ts            # Settings persistence (WXT storage API)
+│   │   ├── youtube.ts            # DOM interaction: skip + continue-watching logic
+│   │   └── utils/
+│   │       └── logger.ts         # Centralized logger ([Skipper] prefix)
+│   └── public/
+│       └── icons/                # Extension icons (16, 32, 48, 128 px)
+├── wxt.config.ts                 # WXT + manifest configuration
+├── package.json
+└── README.md
+```
 
-### Development Setup
+## How It Works
 
-1. Fork the repository
-2. Clone your fork
-3. Install dependencies: `pnpm install`
-4. Create a branch: `git checkout -b feature/your-feature`
-5. Make your changes
-6. Test in both Chrome and Firefox
-7. Commit: `git commit -m "Add your feature"`
-8. Push: `git push origin feature/your-feature`
-9. Create a Pull Request
+1. **Content script** loads on every `youtube.com/watch?*` page and waits for the YouTube player to appear in the DOM.
+2. A **`MutationObserver`** is attached to the player container (`#movie_player`) and fires on any child DOM changes.
+3. On each mutation, the script queries a prioritized list of skip button selectors:
+    - `.ytp-ad-skip-button-modern`
+    - `.ytp-ad-skip-button-container button`
+    - `.ytp-skip-ad-button`
+    - `.ytp-ad-skip-button` (legacy)
+4. A button is only clicked if it passes visibility checks: non-zero dimensions, not hidden, full opacity (1.0), not disabled, and no countdown text.
+5. The click is simulated with `mousedown` / `mouseup` / `click` / `pointerdown` / `pointerup` events for compatibility with YouTube's event handlers.
+6. A short **initial polling phase** (every 1 s for the first 10 s) catches buttons that appear before the observer is ready, after which the observer takes over exclusively.
+7. The **popup toggle** writes to `browser.storage.local`; the content script watches storage changes and starts or stops the observer in real time.
 
-### Guidelines
+## Browser Support
 
--   Follow the existing code style
--   Use technology standards
--   Update documentation as needed
+-   Chrome/Chromium: Version 88+ (Manifest V3)
+-   Firefox: Version 109+ (Manifest V2)
+-   Edge: Version 88+
 
-## 📝 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details
 
-## 👤 Author
+## Author
 
 **Guido Dinello**
 
 -   GitHub: [@guidodinello](https://github.com/guidodinello)
--   Extension ID: `pullscope@guidodinello.dev`
-
-## 🙏 Acknowledgments
-
--   Built with [WXT](https://wxt.dev/)
--   Template used [oneezy/svelte-5-extension](https://github.com/oneezy/svelte-5-extension)

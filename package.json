@@ -1,13 +1,12 @@
 {
-    "name": "pullscope",
-    "description": "Automatically apply custom filters to GitHub Pull Request pages with real-time sync",
+    "name": "skipper",
+    "description": "Automatically skip YouTube ads by clicking the skip button",
     "private": true,
     "version": "0.1.0",
     "type": "module",
     "keywords": [
-        "github",
-        "pull-request",
-        "filters",
+        "youtube",
+        "ad-skipper",
         "browser-extension",
         "chrome-extension",
         "firefox-extension",

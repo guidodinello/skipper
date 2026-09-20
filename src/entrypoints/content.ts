@@ -5,7 +5,7 @@ import { logger } from '@/lib/utils/logger';
 import { TIMINGS } from '@/lib/constants';
 
 export default defineContentScript({
-	matches: ['https://www.youtube.com/watch*'],
+	matches: ['https://www.youtube.com/*'],
 
 	async main() {
 		logger.info('Content script initialized');
@@ -135,6 +135,20 @@ export default defineContentScript({
 			logger.info('Content script cleaned up');
 		}
 
+		// Handle YouTube SPA navigation (clicking between videos doesn't reload the page)
+		async function onNavigate() {
+			logger.info('YouTube navigation detected, reinitializing');
+			stop();
+			try {
+				await waitForYouTubePlayer();
+				if (isEnabled) start();
+			} catch (err) {
+				logger.error('Failed to detect YouTube player after navigation', err);
+			}
+		}
+
+		window.addEventListener('yt-navigate-finish', onNavigate);
+
 		// Watch for settings changes
 		const unwatchEnabled = watchEnabled((enabled) => {
 			isEnabled = enabled;
@@ -159,6 +173,7 @@ export default defineContentScript({
 		return () => {
 			cleanup();
 			unwatchEnabled();
+			window.removeEventListener('yt-navigate-finish', onNavigate);
 			window.removeEventListener('beforeunload', cleanup);
 		};
 	},

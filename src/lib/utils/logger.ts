@@ -2,7 +2,7 @@ type LogLevel = "debug" | "info" | "warn" | "error" | "action";
 
 class Logger {
     private isDevelopment = import.meta.env.DEV;
-    private prefix = "[Skipper]";
+    private prefix = "[Skipper]"; // TODO: set this prefix dynamically based on the add on name or some id
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private log(level: LogLevel, message: string, ...args: any[]) {
