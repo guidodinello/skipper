@@ -61,6 +61,9 @@
 
             <button
                 type="button"
+                role="switch"
+                aria-checked={enabled}
+                aria-label="Auto-skip ads"
                 onclick={toggle}
                 class="relative inline-flex h-8 w-14 items-center rounded-full transition-colors {enabled
                     ? 'bg-blue-600'
