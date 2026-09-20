@@ -4,17 +4,17 @@
 @plugin "@tailwindcss/forms";
 
 @layer base {
-	body {
-		@apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
-	}
+    body {
+        @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white;
+    }
 
-	/* Ensure color scheme is set for light-dark() to work */
-	:root {
-		color-scheme: light dark;
-	}
+    /* Ensure color scheme is set for light-dark() to work */
+    :root {
+        color-scheme: light dark;
+    }
 
-	/* Improve readability */
-	button {
-		font-weight: 500;
-	}
+    /* Improve readability */
+    button {
+        font-weight: 500;
+    }
 }

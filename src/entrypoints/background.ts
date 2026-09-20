@@ -1,5 +1,5 @@
-import { logger } from '@/lib/utils/logger';
+import { logger } from "@/lib/utils/logger";
 
 export default defineBackground(() => {
-	logger.info('Background script initialized', { id: browser.runtime.id });
+    logger.info("Background script initialized", { id: browser.runtime.id });
 });

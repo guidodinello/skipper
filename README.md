@@ -6,16 +6,16 @@ A lightweight browser extension that watches for YouTube skip ad buttons and cli
 
 ## Features
 
--   **Automatic Ad Skipping**: Detects and clicks the skip button the moment it becomes available
--   **Continue Watching**: Automatically dismisses YouTube's "Continue watching?" confirmation dialog
--   **Multi-Selector Fallback**: Targets multiple known skip button selectors so it keeps working when YouTube changes their DOM
--   **Smart Click Detection**: Waits until the skip button is fully visible and enabled (opacity check, disabled/aria-disabled check) before clicking — avoids false triggers during countdown
--   **Simulated User Interaction**: Dispatches `mousedown`, `mouseup`, `click`, and pointer events for maximum YouTube compatibility
--   **Click Cooldown**: Prevents spam-clicking the same button within a 3-second window
--   **Real-Time DOM Watching**: Uses a `MutationObserver` scoped to the YouTube player container for efficient, low-overhead detection
--   **Toggle On/Off**: Enable or disable skipping from the popup without reloading the page; state is persisted across sessions
--   **Dark Mode**: Popup UI supports system dark mode automatically
--   **Cross-Browser**: Works on Chrome/Chromium (MV3) and Firefox (MV2)
+- **Automatic Ad Skipping**: Detects and clicks the skip button the moment it becomes available
+- **Continue Watching**: Automatically dismisses YouTube's "Continue watching?" confirmation dialog
+- **Multi-Selector Fallback**: Targets multiple known skip button selectors so it keeps working when YouTube changes their DOM
+- **Smart Click Detection**: Waits until the skip button is fully visible and enabled (opacity check, disabled/aria-disabled check) before clicking — avoids false triggers during countdown
+- **Simulated User Interaction**: Dispatches `mousedown`, `mouseup`, `click`, and pointer events for maximum YouTube compatibility
+- **Click Cooldown**: Prevents spam-clicking the same button within a 3-second window
+- **Real-Time DOM Watching**: Uses a `MutationObserver` scoped to the YouTube player container for efficient, low-overhead detection
+- **Toggle On/Off**: Enable or disable skipping from the popup without reloading the page; state is persisted across sessions
+- **Dark Mode**: Popup UI supports system dark mode automatically
+- **Cross-Browser**: Works on Chrome/Chromium (MV3) and Firefox (MV2)
 
 ## Installation
 
@@ -70,8 +70,8 @@ Open the browser console on a YouTube watch page and filter for `[Skipper]` to s
 
 ### Prerequisites
 
--   [Node.js](https://nodejs.org/) (v18 or higher)
--   [pnpm](https://pnpm.io/) package manager
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [pnpm](https://pnpm.io/) package manager
 
 ### Setup
 
@@ -132,11 +132,11 @@ pnpm fix
 
 ## Technology Stack
 
--   **[WXT](https://wxt.dev/)** - Modern cross-browser extension framework
--   **[Svelte 5](https://svelte.dev/)** - Reactive UI with runes API (`$state`, `$effect`, `$derived`)
--   **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript throughout
--   **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first styling for the popup UI
--   **[Vite](https://vitejs.dev/)** - Fast build tool
+- **[WXT](https://wxt.dev/)** - Modern cross-browser extension framework
+- **[Svelte 5](https://svelte.dev/)** - Reactive UI with runes API (`$state`, `$effect`, `$derived`)
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript throughout
+- **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first styling for the popup UI
+- **[Vite](https://vitejs.dev/)** - Fast build tool
 
 ## Project Structure
 
@@ -179,9 +179,9 @@ skipper/
 
 ## Browser Support
 
--   Chrome/Chromium: Version 88+ (Manifest V3)
--   Firefox: Version 109+ (Manifest V2)
--   Edge: Version 88+
+- Chrome/Chromium: Version 88+ (Manifest V3)
+- Firefox: Version 109+ (Manifest V2)
+- Edge: Version 88+
 
 ## License
 
@@ -191,4 +191,4 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 **Guido Dinello**
 
--   GitHub: [@guidodinello](https://github.com/guidodinello)
+- GitHub: [@guidodinello](https://github.com/guidodinello)

@@ -20,7 +20,7 @@ for (const size of sizes) {
     await sharp(pngPath)
         .resize(size, size, {
             fit: "contain",
-            background: { r: 0, g: 0, b: 0, alpha: 0 }
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
         })
         .toFile(outputPath);
 
