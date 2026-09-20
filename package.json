@@ -49,6 +49,7 @@
         "@wxt-dev/module-svelte": "^2.0.5",
         "eslint": "^9.39.1",
         "eslint-plugin-svelte": "^3.13.0",
+        "globals": "^17.12.0",
         "husky": "^9.1.7",
         "lint-staged": "^16.2.6",
         "prettier": "^3.3.3",

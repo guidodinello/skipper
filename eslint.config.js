@@ -3,6 +3,7 @@ import tseslint from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
 import sveltePlugin from "eslint-plugin-svelte";
 import svelteParser from "svelte-eslint-parser";
+import globals from "globals";
 
 export default [
     // Ignore patterns
@@ -30,20 +31,10 @@ export default [
                 sourceType: "module",
             },
             globals: {
-                // Browser globals
-                browser: "readonly",
-                document: "readonly",
-                window: "readonly",
-                crypto: "readonly",
-                console: "readonly",
-                setTimeout: "readonly",
-                clearTimeout: "readonly",
-                Event: "readonly",
-                KeyboardEvent: "readonly",
-                HTMLInputElement: "readonly",
-                Element: "readonly",
-                MutationObserver: "readonly",
-                // WXT globals
+                ...globals.browser,
+                // Extension APIs (browser, chrome)
+                ...globals.webextensions,
+                // WXT auto-imports
                 defineBackground: "readonly",
                 defineContentScript: "readonly",
                 // Svelte 5 runes
@@ -84,20 +75,10 @@ export default [
                 extraFileExtensions: [".svelte"],
             },
             globals: {
-                // Browser globals
-                browser: "readonly",
-                document: "readonly",
-                window: "readonly",
-                crypto: "readonly",
-                console: "readonly",
-                setTimeout: "readonly",
-                clearTimeout: "readonly",
-                Event: "readonly",
-                KeyboardEvent: "readonly",
-                HTMLInputElement: "readonly",
-                Element: "readonly",
-                MutationObserver: "readonly",
-                // WXT globals
+                ...globals.browser,
+                // Extension APIs (browser, chrome)
+                ...globals.webextensions,
+                // WXT auto-imports
                 defineBackground: "readonly",
                 defineContentScript: "readonly",
                 // Svelte 5 runes
