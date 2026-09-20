@@ -1,4 +1,4 @@
-import { defineContentScript } from 'wxt/sandbox';
+import { defineContentScript } from 'wxt/utils/define-content-script';
 import { clickSkipButton, clickContinueWatching, waitForYouTubePlayer, getPlayerContainer } from '@/lib/youtube';
 import { getEnabled, watchEnabled } from '@/lib/storage';
 import { logger } from '@/lib/utils/logger';
